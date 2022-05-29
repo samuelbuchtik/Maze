@@ -1,0 +1,92 @@
+#include <iostream>
+using namespace std;
+const int SIRKA = 12;
+const int VYSKA = 10;
+
+void printMaze(char bludisko[][SIRKA], int curx, int cury);
+bool validMove(char bludisko[][SIRKA], int newX, int newY);
+bool move(char bludisko[][SIRKA], int& curX, int& curY,
+	int newX, int newY);
+
+bool validMove(char bludisko[][SIRKA], int newX, int newY)
+{
+	
+	if (newX < 0 || newX >= SIRKA)
+		return false;
+	if (newY < 0 || newY >= VYSKA)
+		return false;
+	
+	if (bludisko[newY][newX] == 'X')
+		return false;
+	return true;
+}
+
+bool move(char bludisko[][SIRKA], int& curX, int& curY,
+	int newX, int newY)
+{
+	bool vychod = false;
+	if (bludisko[newY][newX] == 'E')
+		vychod = true;
+	cout << "Si vitaz!";
+	curX = newX;
+	curY = newY;
+	return vychod;
+}
+
+void printMaze(char bludisko[][SIRKA], int curx, int cury)
+{
+	for (int y = 0; y < VYSKA;y++)
+	{
+		for (int x = 0; x < SIRKA; x++)
+		{
+			if ((x == curx) && (y == cury))
+				cout << "$";
+			else
+				cout << bludisko[y][x];
+		}
+		cout << endl;
+	}
+}
+int main()
+{
+	char bludisko[VYSKA][SIRKA] = {
+	 {'X','X','X','X','X','X','X','X','X','X','X','X'},
+	 {'X',' ',' ','X',' ',' ','X',' ',' ',' ',' ','X'},
+	 {'X',' ','X',' ',' ',' ',' ','X',' ',' ',' ','X'},
+	 {'X',' ','X','X','X',' ','X',' ','X',' ',' ','X'},
+	 {'X',' ',' ',' ','X',' ','X',' ',' ',' ',' ','X'},
+	 {'X',' ',' ',' ','X',' ',' ',' ','X','X','E','X'},
+	 {'X',' ','X','X','X',' ',' ',' ',' ',' ','X','X'},
+	 {'X',' ','X',' ',' ',' ','X',' ',' ','X',' ','X'},
+	 {'X',' ',' ',' ',' ',' ','X',' ','X',' ',' ','X'},
+	 {'X','X','X','X','X','X','X','X','X','X','X','X'}
+	};
+	int x = 1, y = 1;
+	bool vychod = false;
+	while (!vychod)
+	{
+		printMaze(bludisko, x, y);
+		cout << "Pouzi WASD a po kazdom tahu stlac ENTER" << endl;
+		char c;
+		cin >> c;
+		c = tolower(c);
+		switch (c)
+		{
+		case 'w':
+			if (validMove(bludisko, x, y - 1))
+				vychod = move(bludisko, x, y, x, y - 1);
+			break;
+		case 'a':
+			if (validMove(bludisko, x - 1, y))
+				vychod = move(bludisko, x, y, x - 1, y);
+			break;
+		case 's':
+			if (validMove(bludisko, x, y + 1))
+				vychod = move(bludisko, x, y, x, y + 1);
+			break;
+		case 'd':
+			if (validMove(bludisko, x + 1, y))
+				vychod = move(bludisko, x, y, x + 1, y);
+		}
+	}
+}
